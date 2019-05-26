@@ -6,11 +6,6 @@ import java.util.Arrays;
 
 public class Tests {
     public static void main(String[] args) {
-
-        String s = null;
-
-
-
 //        int m1 = 1548673;
 //        BloomFilter b1 = new BloomFilter(m1, System.getProperty("user.dir") + "/hash_functions.txt");
 //        b1.updateTable(System.getProperty("user.dir") + "/bad_passwords.txt");
@@ -30,13 +25,6 @@ public class Tests {
             System.out.println("rejected by BF: " + rejectedPasswordsAmount);
             System.out.println("table size: " + i);
         }
-
-
-
-
-
-
-
 
 //        // ++++++++++++++++++ writing function +++++++++++++++
 //        // The name of the file to open.
@@ -67,6 +55,10 @@ public class Tests {
 //            // ++++++++++++++++++ writing function +++++++++++++++
 //
 //        }
+    } // end of main
+
+    public static void BTreeTests(){
+
     }
 
     private static BloomFilter contructBloomFilter(String m1) {

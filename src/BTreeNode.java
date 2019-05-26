@@ -27,7 +27,7 @@ public class BTreeNode {
             insertNonFull(key);
             return this;
     }
-
+    // insert when root is not full
     private void insertNonFull (String key){
         int i = this.numberOfKeys;
         if(isLeaf){
@@ -69,10 +69,11 @@ public class BTreeNode {
         }
         // update the numbers of keys of toSplit
         toSplit.numberOfKeys = t-1;
+        // inserting the newChild to current node
         for (int i = splitIndex+1; i < numberOfKeys; i++)
             this.children[i+1] = this.children[i];
         this.children[splitIndex+1] = newChild;
-        // inserting the middle key of toSplit to this node
+        // inserting the middle key of toSplit to current node
         for( int i = splitIndex; i < this.numberOfKeys; i++)
             this.keys[i+1] = keys[i];
         this.keys[splitIndex] = toSplit.keys[t];
