@@ -4,7 +4,6 @@ import java.nio.file.Paths;
 
 public class HelperFunctions {
 
-
     private static int p = 15486907;
 
     public static int[] keyPharser(String path){
@@ -12,7 +11,7 @@ public class HelperFunctions {
         // saving all the keys in an array
         String[] keysArray = keys.split("\\r?\\n");
         // encoding the keys using horner's rule
-        return keysEncoding(keysArray);;
+        return keysEncoding(keysArray);
 
     }
 

@@ -13,6 +13,14 @@ public class HashList {
         first = new HashListElement(key, first);
     }
 
+
+    //Returns true if this list contains the specified key
+    public boolean contains(int key) {
+        boolean output = false;
+        for (HashListElement curr = first; curr != null & !output; curr = curr.getNext())
+            output = key == curr.getData();
+        return output;
+    }
     //Returns a String representing this object
     public String toString() {
         String output = "<";
@@ -24,13 +32,6 @@ public class HashList {
                 output = output + ", ";
         }
         output = output + ">";
-        return output;
-    }
-    //Returns true if this list contains the specified key
-    public boolean contains(int key) {
-        boolean output = false;
-        for (HashListElement curr = first; curr != null & !output; curr = curr.getNext())
-            output = key == curr.getData();
         return output;
     }
 }

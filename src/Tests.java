@@ -7,6 +7,8 @@ import java.util.Arrays;
 public class Tests {
     public static void main(String[] args) {
 
+        String s = null;
+
 
 
 //        int m1 = 1548673;
@@ -14,18 +16,18 @@ public class Tests {
 //        b1.updateTable(System.getProperty("user.dir") + "/bad_passwords.txt");
 
         //Create the Bloom Filter.
-        for(int i = 10; i<=100; i++){
+        for(int i = 1; i<=1; i++){
             String s = "" + i;
-            BloomFilter bloomFilter = contructBloomFilter(s);
+            BloomFilter bloomFilter = contructBloomFilter("32");
             //Create the Hash Table.
-            HashTable hashTable = contructHashTable("4096");
+            HashTable hashTable = contructHashTable("32");
             //Find the percentage of false-positives
             String falsePositivesPercent = bloomFilter.getFalsePositivePercentage(hashTable, System.getProperty("user.dir")+"/requested_passwords.txt");
             System.out.println(falsePositivesPercent);
 
             //Find the number of rejected passwords
             String rejectedPasswordsAmount = bloomFilter.getRejectedPasswordsAmount(System.getProperty("user.dir")+"/requested_passwords.txt");
-            System.out.println(" rejected by BF: " + rejectedPasswordsAmount);
+            System.out.println("rejected by BF: " + rejectedPasswordsAmount);
             System.out.println("table size: " + i);
         }
 

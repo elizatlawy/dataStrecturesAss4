@@ -12,17 +12,13 @@ public class HashTable {
         this.m2 = HelperFunctions.stringToInt(m2);
         table = new HashList[this.m2];
     }
-
     public void updateTable(String path){
-        String keys = HelperFunctions.readFileAsString(path);
-        // saving all the keys in an array
-        String[] keysArray = keys.split("\\r?\\n");
-        // encoding the keys using horner's rule
-        int[] encodedKeys = HelperFunctions.keysEncoding(keysArray);
+        int[] encodedKeys = HelperFunctions.keyPharser(path);
         // adding all the keys to the bloom filter table
         for (int encodedKey : encodedKeys) {
             int index = hashFunction(encodedKey);
-            if (table[index] == null)
+            // if we insert to that index for the first time, we need to create an empty list first
+            if (table[index] == null) 
                 table[index] = new HashList();
             table[index].addFirst(encodedKey);
         }
