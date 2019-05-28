@@ -25,7 +25,7 @@ public class HelperFunctions {
         try {
             content = new String(Files.readAllBytes(Paths.get(filePath)));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("failed to read file");
         }
         return content;
     }
@@ -35,7 +35,7 @@ public class HelperFunctions {
      * @param keys array of the keys as strings
      * @return new array of the keys as encoded numbers
      */
-    public static int[] keysEncoding(String[] keys){
+    private static int[] keysEncoding(String[] keys){
         int[] encodedKeys = new int[keys.length];
         for(int i = 0; i < keys.length; i++){
             encodedKeys[i] = horners(keys[i]);
@@ -48,26 +48,30 @@ public class HelperFunctions {
      * @param key the string to be encoded
      * @return new int of the key as encoded number
      */
-    private static int horners(String key){
+    public static int horners(String key){
         long result = key.charAt(0);
         for (int i = 1; i < key.length(); i++){
             result = (key.charAt(i) + 256*result)%p;
         }
         return (int)result;
     }
-    /**
-     * Convert String representing a decimal number to int
-     *
-     * @param str is a string representing a positive decimal number
-     * @return output
-     */
-    public static int stringToInt(String str) {
-        int output = 0;
-        for (int i = 0; i < str.length(); i++) {
-            output = output * 10;
-            output = output + str.charAt(i) - '0';
-
+    public static String estimatedRunTime(double startTime, double endTime){
+        double runTime = (endTime - startTime) / 1000000;
+        String estimatedTime = Double.toString(runTime);
+        int indexOfDot = estimatedTime.indexOf('.');
+        int afterFurDigits = estimatedTime.length() - (indexOfDot + 1);
+        // if the is more than 4 digits after the dot, cut the rest
+        if(afterFurDigits > 4 )
+            estimatedTime = estimatedTime.substring(0,indexOfDot + 5);
+        // if there is less than 4 digits add zeros to the result
+        if(afterFurDigits < 4){
+            while (afterFurDigits < 4){
+                estimatedTime = estimatedTime + "0";
+                afterFurDigits++;
+            }
         }
-        return output;
+
+        return estimatedTime;
+
     }
-}
+} // end of class

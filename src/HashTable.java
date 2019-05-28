@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -9,7 +9,9 @@ public class HashTable {
 
 
     public HashTable(String m2){
-        this.m2 = HelperFunctions.stringToInt(m2);
+        if (m2 == null || Integer.parseInt(m2) < 1)
+            throw new IllegalArgumentException("m2 must be a positive number");
+        this.m2 = Integer.parseInt(m2);
         table = new HashList[this.m2];
     }
     public void updateTable(String path){
@@ -30,7 +32,7 @@ public class HashTable {
      * @return true if exist, false otherwise
      */
     public boolean contains (int key) {
-        boolean contains = true;
+        boolean contains;
         int index = hashFunction(key);
         if(table[index] == null)
             contains = false;
@@ -45,4 +47,31 @@ public class HashTable {
         return (int) (m2 * ((key * a) %1));
 
     }
-}
+    public String getSearchTime(String path){
+        File inputFile = new File(path);
+        double startTime = 0;
+        double endTime = 0;
+        try {
+            FileInputStream stream = new FileInputStream(inputFile);
+            InputStreamReader reader = new InputStreamReader(stream);
+            BufferedReader buffer = new BufferedReader(reader);
+            String line = buffer.readLine();
+            // start of search
+            startTime = System.nanoTime();
+            while (line != null) {
+                this.contains(HelperFunctions.horners(line));
+                line = buffer.readLine();
+            }
+            // end of search
+            endTime = System.nanoTime();
+            buffer.close();
+            reader.close();
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return HelperFunctions.estimatedRunTime(startTime,endTime);
+    }
+
+
+} // end of class
