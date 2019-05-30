@@ -1,16 +1,19 @@
 import java.io.*;
 
 public class BTree {
+    // ---------------------- fields ----------------------
     private int t;
     private BTreeNode root;
 
-
+    // ---------------------- constructor ----------------------
     public BTree(String t) {
         if (t == null || Integer.parseInt(t) < 1)
             throw new IllegalArgumentException("t must be a positive number");
         this.t = Integer.parseInt(t);
         root = null;
     }
+
+    // ---------------------- Methods ----------------------
     public void createFullTree(String path) {
         File inputFile = new File(path);
         try {
@@ -34,11 +37,10 @@ public class BTree {
         if (key == null)
             throw new NullPointerException("string is null");
 
-        if (root == null){
+        if (root == null) {
             root = new BTreeNode(t, true);
             root.insert(key);
-        }
-        else{
+        } else {
             key = key.toLowerCase();
             root = root.insert(key);
         }
@@ -49,13 +51,13 @@ public class BTree {
             throw new NullPointerException("string is null");
         else if (root == null)
             return null;
-        else{
+        else {
             key = key.toLowerCase();
             return root.search(key);
         }
     }
 
-    public void deleteKeysFromTree (String path){
+    public void deleteKeysFromTree(String path) {
         File inputFile = new File(path);
         try {
             FileInputStream stream = new FileInputStream(inputFile);
@@ -75,24 +77,23 @@ public class BTree {
         }
     }
 
-    public void delete(String key){
-        if(root != null){
-           root.deleteKey(key);
+    public void delete(String key) {
+        if (root != null) {
+            root.deleteKey(key);
             // If the root node has 0 keys, if it is a leaf set it to be null
-           if(root.getNumberOfKeys() == 0){
-               BTreeNode tmp = root;
-               if(root.isLeaf())
-                   root = null;
-               // if the root has a child, make its first child as the new root
-               else
-                   root = root.children[0];
-               tmp = null;
-           }
+            if (root.getNumberOfKeys() == 0) {
+                BTreeNode tmp = root;
+                if (root.getIsLeaf())
+                    root = null;
+                    // if the root has a child, make its first child as the new root
+                else
+                    root = root.children[0];
+                tmp = null;
+            }
         }
-
     }
 
-    public String getSearchTime(String path){
+    public String getSearchTime(String path) {
         File inputFile = new File(path);
         double startTime = 0;
         double endTime = 0;
@@ -115,15 +116,15 @@ public class BTree {
         } catch (IOException e) {
             System.out.println("failed to read file");
         }
-        return HelperFunctions.estimatedRunTime(startTime,endTime);
+        return HelperFunctions.estimatedRunTime(startTime, endTime);
     }
+
     public String toString() {
         if (root == null)
-            return "Empty tree";
-        else{
-            String output = "";
-            output = root.DFS(0, output);
-            return output;
+            // the tree is empty
+            return "";
+        else {
+            return root.DFS(0, "");
         }
     }
 } // end of class

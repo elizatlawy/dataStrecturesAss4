@@ -21,11 +21,8 @@ public class Tests {
 //        System.out.println(estimatedRunTime(str3));
 //        System.out.println(estimatedRunTime(str4));
 
-
-
-
         BTreeTests();
-        BloomFilterTests();
+        //BloomFilterTests();
 
 //        // ++++++++++++++++++ writing function +++++++++++++++
 //        // The name of the file to open.
@@ -80,9 +77,9 @@ public class Tests {
         //Create the Bloom Filter.
         for(int i = 1; i<=1; i++){
             String s = "" + i;
-            BloomFilter bloomFilter = contructBloomFilter("30000000");
+            BloomFilter bloomFilter = contructBloomFilter("32");
             //Create the Hash Table.
-            HashTable hashTable = contructHashTable("3000000");
+            HashTable hashTable = contructHashTable("32");
             //Find the percentage of false-positives
 //            String falsePositivesPercent = bloomFilter.getFalsePositivePercentage(hashTable, System.getProperty("user.dir")+"/requested_passwords.txt");
 //            System.out.println(falsePositivesPercent);
@@ -101,7 +98,7 @@ public class Tests {
 
     public static void BTreeTests(){
         //Create the B tree using the t value and the path to the bad_passwords file.
-        BTree btree = createTree("100");
+        BTree btree = createTree("2");
 
         //Get the DFS representation of the btree
         String treeLayout = btree.toString();
@@ -109,6 +106,15 @@ public class Tests {
         String btreeSearchTime = btree.getSearchTime(System.getProperty("user.dir")+"/requested_passwords.txt");
         System.out.println(btreeSearchTime);
 
+        //Get the DFS representation of the btree, after performing deletions
+        String treeLayoutAfterDeletions = deleteKeysFromTree(btree);
+        System.out.println(treeLayoutAfterDeletions);
+
+    }
+
+    private static String deleteKeysFromTree(BTree btree) {
+        btree.deleteKeysFromTree(System.getProperty("user.dir")+"/delete_keys.txt");
+        return btree.toString();
     }
 
     // Create the BTree using the t value, and the friends file.
@@ -122,14 +128,14 @@ public class Tests {
     private static BloomFilter contructBloomFilter(String m1) {
         BloomFilter bloomFilter = new BloomFilter(m1, System.getProperty("user.dir")+"/hash_functions.txt");
         //update the Bloom Filter's table with the bad passwords
-        bloomFilter.updateTable(System.getProperty("user.dir")+"/10k-most-common.txt");
+        bloomFilter.updateTable(System.getProperty("user.dir")+"/bad_passwords.txt");
         return bloomFilter;
     }
 
     private static HashTable contructHashTable(String m2) {
         HashTable hashTable = new HashTable(m2);
         //update the Hash Table with the bad passwords
-        hashTable.updateTable(System.getProperty("user.dir")+"/10k-most-common.txt");
+        hashTable.updateTable(System.getProperty("user.dir")+"/bad_passwords.txt");
         return hashTable;
     }
 

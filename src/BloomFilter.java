@@ -2,11 +2,12 @@ import java.io.IOException;
 import java.nio.file.*;
 
 public class BloomFilter {
+    // ---------------------- fields ----------------------
     private int p = 15486907;
     private int m1;
     public int[] table; // the table of the bloom filter
     private String[] functions; // array of the hash functions alpha and beta parameters
-
+    // ---------------------- constructor ----------------------
     public BloomFilter(String m1, String hash_functions_path) {
         if (m1 == null || Integer.parseInt(m1) < 1)
             throw new IllegalArgumentException("m1 must be a positive number");
@@ -16,7 +17,7 @@ public class BloomFilter {
         //saving all of the hash functions alpha and beta parameters in an array
         functions = hash_functions.split("\\r?\\n"); // splits the String to array by down line
     }
-
+    // ---------------------- Methods ----------------------
      public void updateTable(String path){
          int[] encodedKeys = HelperFunctions.keyPharser(path);
         // adding all the keys to the bloom filter table
@@ -66,15 +67,15 @@ public class BloomFilter {
 
     public String getFalsePositivePercentage(HashTable hashTable, String path){
         int[] encodedKeys = HelperFunctions.keyPharser(path);
-        double falseRejcetion = 0; double trueRejection = 0;
+        double falseRejection = 0; double trueRejection = 0;
         for (int encodedKey : encodedKeys) {
             if (contains(encodedKey) & !hashTable.contains(encodedKey))
-                falseRejcetion++;
+                falseRejection++;
             if (hashTable.contains(encodedKey))
                 trueRejection++;
         }
         double notRejected = encodedKeys.length - trueRejection;
-        double FalsePositivePercentage = falseRejcetion/notRejected;
+        double FalsePositivePercentage = falseRejection/notRejected;
         return Double.toString(FalsePositivePercentage);
     }
 
