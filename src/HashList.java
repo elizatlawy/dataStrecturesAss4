@@ -2,7 +2,7 @@ public class HashList {
     // ---------------------- fields ----------------------
     private HashListElement first;
 
-    // ---------------------- constructors ----------------------
+    // ---------------------- constructor ----------------------
     public HashList() {
         first = null;
     }
@@ -21,6 +21,7 @@ public class HashList {
             output = key == curr.getData();
         return output;
     }
+
     //Returns a String representing this object
     public String toString() {
         String output = "<";

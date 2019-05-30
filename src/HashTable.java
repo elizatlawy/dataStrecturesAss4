@@ -3,51 +3,54 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class HashTable {
+    // ---------------------- fields ----------------------
     private int p = 15486907;
     private HashList[] table;
     private int m2;
 
-
-    public HashTable(String m2){
+    // ---------------------- constructor ----------------------
+    public HashTable(String m2) {
         if (m2 == null || Integer.parseInt(m2) < 1)
             throw new IllegalArgumentException("m2 must be a positive number");
         this.m2 = Integer.parseInt(m2);
         table = new HashList[this.m2];
     }
-    public void updateTable(String path){
+
+    // ---------------------- Methods ----------------------
+    public void updateTable(String path) {
         int[] encodedKeys = HelperFunctions.keyPharser(path);
         // adding all the keys to the bloom filter table
         for (int encodedKey : encodedKeys) {
             int index = hashFunction(encodedKey);
             // if we insert to that index for the first time, we need to create an empty list first
-            if (table[index] == null) 
+            if (table[index] == null)
                 table[index] = new HashList();
             table[index].addFirst(encodedKey);
         }
     }
 
     /**
-     *
      * @param key the value we check if exist in the hash table
      * @return true if exist, false otherwise
      */
-    public boolean contains (int key) {
+    public boolean contains(int key) {
         boolean contains;
         int index = hashFunction(key);
-        if(table[index] == null)
+        if (table[index] == null)
             contains = false;
         else
             contains = table[index].contains(key);
         return contains;
     }
 
-    private int hashFunction(int key){
+    private int hashFunction(int key) {
         // hashing by using the multiplication method
-        double a = (Math.sqrt(5)-1)/2;
-        return (int) (m2 * ((key * a) %1));
+        double a = (Math.sqrt(5) - 1) / 2;
+        return (int) (m2 * ((key * a) % 1));
 
     }
-    public String getSearchTime(String path){
+
+    public String getSearchTime(String path) {
         File inputFile = new File(path);
         double startTime = 0;
         double endTime = 0;
@@ -70,7 +73,7 @@ public class HashTable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return HelperFunctions.estimatedRunTime(startTime,endTime);
+        return HelperFunctions.estimatedRunTime(startTime, endTime);
     }
 
 

@@ -22,7 +22,7 @@ public class Tests {
 //        System.out.println(estimatedRunTime(str4));
 
         BTreeTests();
-        //BloomFilterTests();
+        BloomFilterTests();
 
 //        // ++++++++++++++++++ writing function +++++++++++++++
 //        // The name of the file to open.
@@ -72,14 +72,14 @@ public class Tests {
 //        return estimatedTime;
 //    }
 
-    public static void BloomFilterTests(){
+    public static void BloomFilterTests() {
 
         //Create the Bloom Filter.
-        for(int i = 1; i<=1; i++){
+        for (int i = 1; i <= 1; i++) {
             String s = "" + i;
-            BloomFilter bloomFilter = contructBloomFilter("32");
+            BloomFilter bloomFilter = contructBloomFilter("1000000");
             //Create the Hash Table.
-            HashTable hashTable = contructHashTable("32");
+            HashTable hashTable = contructHashTable("1000000");
             //Find the percentage of false-positives
 //            String falsePositivesPercent = bloomFilter.getFalsePositivePercentage(hashTable, System.getProperty("user.dir")+"/requested_passwords.txt");
 //            System.out.println(falsePositivesPercent);
@@ -89,31 +89,29 @@ public class Tests {
 //            System.out.println("rejected by BF: " + rejectedPasswordsAmount);
 //            System.out.println("table size: " + i);
 
-            String hashTableSearchTime = hashTable.getSearchTime(System.getProperty("user.dir")+"/requested_passwords.txt");
+            String hashTableSearchTime = hashTable.getSearchTime(System.getProperty("user.dir") + "/10k-most-common.txt");
             System.out.println(hashTableSearchTime);
         }
-
-
     }
 
-    public static void BTreeTests(){
+    public static void BTreeTests() {
         //Create the B tree using the t value and the path to the bad_passwords file.
-        BTree btree = createTree("2");
+        BTree btree = createTree("100");
 
         //Get the DFS representation of the btree
-        String treeLayout = btree.toString();
-        System.out.println(treeLayout);
-        String btreeSearchTime = btree.getSearchTime(System.getProperty("user.dir")+"/requested_passwords.txt");
+        //String treeLayout = btree.toString();
+        //System.out.println(treeLayout);
+        String btreeSearchTime = btree.getSearchTime(System.getProperty("user.dir") + "/10k-most-common.txt");
         System.out.println(btreeSearchTime);
 
         //Get the DFS representation of the btree, after performing deletions
-        String treeLayoutAfterDeletions = deleteKeysFromTree(btree);
-        System.out.println(treeLayoutAfterDeletions);
+        //String treeLayoutAfterDeletions = deleteKeysFromTree(btree);
+        //System.out.println(treeLayoutAfterDeletions);
 
     }
 
     private static String deleteKeysFromTree(BTree btree) {
-        btree.deleteKeysFromTree(System.getProperty("user.dir")+"/delete_keys.txt");
+        btree.deleteKeysFromTree(System.getProperty("user.dir") + "/10k-most-common.txt");
         return btree.toString();
     }
 
@@ -121,43 +119,43 @@ public class Tests {
     // Insert the bad passwords into the tree.
     private static BTree createTree(String tVal) {
         BTree btree = new BTree(tVal);
-        btree.createFullTree(System.getProperty("user.dir")+"/bad_passwords.txt");
+        btree.createFullTree(System.getProperty("user.dir") + "/password-list-top-100000.txt");
         return btree;
     }
 
     private static BloomFilter contructBloomFilter(String m1) {
-        BloomFilter bloomFilter = new BloomFilter(m1, System.getProperty("user.dir")+"/hash_functions.txt");
+        BloomFilter bloomFilter = new BloomFilter(m1, System.getProperty("user.dir") + "/hash_functions.txt");
         //update the Bloom Filter's table with the bad passwords
-        bloomFilter.updateTable(System.getProperty("user.dir")+"/bad_passwords.txt");
+        bloomFilter.updateTable(System.getProperty("user.dir") + "/password-list-top-100000.txt");
         return bloomFilter;
     }
 
     private static HashTable contructHashTable(String m2) {
         HashTable hashTable = new HashTable(m2);
         //update the Hash Table with the bad passwords
-        hashTable.updateTable(System.getProperty("user.dir")+"/bad_passwords.txt");
+        hashTable.updateTable(System.getProperty("user.dir") + "/password-list-top-100000.txt");
         return hashTable;
     }
 
 
-        public static int horners (String key){
-            int p = 15486907;
-            long result = key.charAt(0);
-            for (int i = 1; i < key.length(); i++) {
-                result = (key.charAt(i) + 256 * result) % p;
-            }
-            return (int) result;
+    public static int horners(String key) {
+        int p = 15486907;
+        long result = key.charAt(0);
+        for (int i = 1; i < key.length(); i++) {
+            result = (key.charAt(i) + 256 * result) % p;
         }
-
-
-        private static String readFileAsString (String filePath){
-            String content = "";
-            try {
-                content = new String(Files.readAllBytes(Paths.get(filePath)));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return content;
-        }
+        return (int) result;
     }
+
+
+    private static String readFileAsString(String filePath) {
+        String content = "";
+        try {
+            content = new String(Files.readAllBytes(Paths.get(filePath)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
+    }
+}
 

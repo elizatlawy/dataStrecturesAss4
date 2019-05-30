@@ -7,6 +7,7 @@ public class BloomFilter {
     private int m1;
     public int[] table; // the table of the bloom filter
     private String[] functions; // array of the hash functions alpha and beta parameters
+
     // ---------------------- constructor ----------------------
     public BloomFilter(String m1, String hash_functions_path) {
         if (m1 == null || Integer.parseInt(m1) < 1)
@@ -17,24 +18,24 @@ public class BloomFilter {
         //saving all of the hash functions alpha and beta parameters in an array
         functions = hash_functions.split("\\r?\\n"); // splits the String to array by down line
     }
+
     // ---------------------- Methods ----------------------
-     public void updateTable(String path){
-         int[] encodedKeys = HelperFunctions.keyPharser(path);
+    public void updateTable(String path) {
+        int[] encodedKeys = HelperFunctions.keyPharser(path);
         // adding all the keys to the bloom filter table
-         for (int encodedKey : encodedKeys) add(encodedKey);
+        for (int encodedKey : encodedKeys) add(encodedKey);
     }
 
     /**
-     *
      * @param key the value we check if exist in the bloom filter table
      * @return true if exist, false otherwise
      */
-    private boolean contains (int key) {
+    private boolean contains(int key) {
         boolean contains = true;
         for (int i = 0; i < functions.length & contains; i++) {
             // calculating the current hash function
             int h = hashing(functions[i], key);
-            if(table[h] != 1)
+            if (table[h] != 1)
                 contains = false;
         }
         return contains;
@@ -42,9 +43,10 @@ public class BloomFilter {
 
     /**
      * adding a new value to the bloom filter table
+     *
      * @param key the value to be stored in the bloom filter table
      */
-    private void add (int key){
+    private void add(int key) {
         // going over all of the hash functions in the array and applying them on the key value
         for (String function : functions) {
             int h = hashing(function, key);
@@ -52,22 +54,23 @@ public class BloomFilter {
             table[h] = 1;
         }
     }
+
     /**
-     *
      * @param function String that contains the alpha & beta parameters
-     * @param key the key to insert
+     * @param key      the key to insert
      * @return h the hashing result
      */
-    private int hashing(String function, int key){
+    private int hashing(String function, int key) {
         // calculating the current hash function
-        int alpha = function.charAt(0)-'0';
-        int beta = function.charAt(2)-'0';
+        int alpha = function.charAt(0) - '0';
+        int beta = function.charAt(2) - '0';
         return ((alpha * key + beta) % p) % m1;
     }
 
-    public String getFalsePositivePercentage(HashTable hashTable, String path){
+    public String getFalsePositivePercentage(HashTable hashTable, String path) {
         int[] encodedKeys = HelperFunctions.keyPharser(path);
-        double falseRejection = 0; double trueRejection = 0;
+        double falseRejection = 0;
+        double trueRejection = 0;
         for (int encodedKey : encodedKeys) {
             if (contains(encodedKey) & !hashTable.contains(encodedKey))
                 falseRejection++;
@@ -75,11 +78,11 @@ public class BloomFilter {
                 trueRejection++;
         }
         double notRejected = encodedKeys.length - trueRejection;
-        double FalsePositivePercentage = falseRejection/notRejected;
+        double FalsePositivePercentage = falseRejection / notRejected;
         return Double.toString(FalsePositivePercentage);
     }
 
-    public String getRejectedPasswordsAmount(String path){
+    public String getRejectedPasswordsAmount(String path) {
         int[] encodedKeys = HelperFunctions.keyPharser(path);
         int rejectedPasswordsAmount = 0;
         for (int encodedKey : encodedKeys) {
@@ -87,7 +90,7 @@ public class BloomFilter {
                 rejectedPasswordsAmount++;
 
         }
-        return Double.toString(rejectedPasswordsAmount);
+        return Integer.toString(rejectedPasswordsAmount);
     }
 
 }

@@ -2,7 +2,7 @@ import java.io.*;
 
 public class BTree {
     // ---------------------- fields ----------------------
-    private int t;
+    protected int t;
     private BTreeNode root;
 
     // ---------------------- constructor ----------------------
@@ -64,9 +64,8 @@ public class BTree {
             InputStreamReader reader = new InputStreamReader(stream);
             BufferedReader buffer = new BufferedReader(reader);
             String line = buffer.readLine();
-
             while (line != null) {
-                delete(line);
+                delete(line.toLowerCase());
                 line = buffer.readLine();
             }
             buffer.close();
@@ -82,13 +81,11 @@ public class BTree {
             root.deleteKey(key);
             // If the root node has 0 keys, if it is a leaf set it to be null
             if (root.getNumberOfKeys() == 0) {
-                BTreeNode tmp = root;
                 if (root.getIsLeaf())
                     root = null;
                     // if the root has a child, make its first child as the new root
                 else
                     root = root.children[0];
-                tmp = null;
             }
         }
     }

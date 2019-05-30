@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 class BTreeNode {
     // ---------------------- fields ----------------------
     protected String[] keys;
@@ -192,7 +194,7 @@ class BTreeNode {
         // Case 2: the right sibling has more than t-1
         else if (children[index + 1].numberOfKeys > lowerBoundKeyNumber) {
             String nextKey = getNextKey(index);
-            keys[index + 1] = nextKey;
+            keys[index] = nextKey;
             children[index + 1].deleteKey(nextKey);
         }
         // Case 3: both right & left siblings as lass than t keys,
@@ -215,11 +217,11 @@ class BTreeNode {
             leftChild.keys[i + t] = rightChild.keys[i];
         // Coping the children pointers of rightChild if it is not a leaf
         if (!leftChild.isLeaf) {
-            for (int i = 0; i < rightChild.numberOfKeys; i++)
+            for (int i = 0; i <= rightChild.numberOfKeys; i++)
                 leftChild.children[i + t] = rightChild.children[i];
         }
         // Moving all the keys of this node one step left
-        for (int i = index; i < numberOfKeys; i++)
+        for (int i = index; i < numberOfKeys - 1; i++)
             this.keys[i] = this.keys[i + 1];
         // Moving the children pointers of this node from index + 1 one step left
         for (int i = index + 1; i < numberOfKeys; i++)
@@ -245,8 +247,6 @@ class BTreeNode {
         // if leftChild is not a leaf moving is last children to be the first children of child
         if (!leftChild.isLeaf) {
             child.children[0] = leftChild.children[leftChild.numberOfKeys];
-            // TODO check if nedded
-            //leftChild.children[leftChild.numberOfKeys] = null;
         }
         // moving the rightest key of leftChild to the parent (this node)
         this.keys[index - 1] = leftChild.keys[leftChild.numberOfKeys - 1];
@@ -269,7 +269,7 @@ class BTreeNode {
             rightChild.keys[i - 1] = rightChild.keys[i];
         // if rightChild is not a leaf, moving is children pointers one step left
         if (!rightChild.isLeaf) {
-            for (int i = 1; i < rightChild.numberOfKeys; i++)
+            for (int i = 1; i <= rightChild.numberOfKeys; i++)
                 rightChild.children[i - 1] = rightChild.children[i];
         }
         // updating the number of keys of child & leftChild
@@ -280,7 +280,8 @@ class BTreeNode {
     private String getPrevKey(int index) {
         BTreeNode current = this.children[index];
         while (!current.isLeaf)
-            current = current.children[numberOfKeys];
+            current = current.children[current.numberOfKeys];
+        // Return the last key of the leaf
         return current.keys[current.numberOfKeys - 1];
 
     }
@@ -289,6 +290,7 @@ class BTreeNode {
         BTreeNode current = this.children[index + 1];
         while (!current.isLeaf)
             current = current.children[0];
+        // Return the first key of the leaf
         return current.keys[0];
     }
 
@@ -302,7 +304,7 @@ class BTreeNode {
     }
     // ---------------------- End of Remove Methods ----------------------
 
-    protected String DFSHelper(int depth, String output) {
+    private String DFSHelper(int depth, String output) {
         if (!isLeaf) {
             for (int i = 0; i <= numberOfKeys; i++) {
                 output = this.children[i].DFSHelper(depth + 1, output);
@@ -321,8 +323,9 @@ class BTreeNode {
     protected String DFS(int depth, String output) {
         output = DFSHelper(depth, output);
         // cut the last ","
-        return output.substring(0,output.length()-1);
+        return output.substring(0, output.length() - 1);
     }
+
     // ---------------------- Getters Methods ----------------------
     public int getNumberOfKeys() {
         return this.numberOfKeys;

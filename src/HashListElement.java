@@ -8,6 +8,7 @@ public class HashListElement {
         this.data = data;
         this.next = next;
     }
+
     public HashListElement(int data) {
         this(data, null);
     }
