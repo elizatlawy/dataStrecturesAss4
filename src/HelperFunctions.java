@@ -6,7 +6,7 @@ public class HelperFunctions {
 
     private static int p = 15486907;
 
-    public static int[] keyPharser(String path) {
+    public static int[] keyParser(String path) {
         String keys = readFileAsString(path);
         // saving all the keys in an array
         String[] keysArray = keys.split("\\r?\\n");
@@ -54,7 +54,7 @@ public class HelperFunctions {
     public static int horners(String key) {
         long result = key.charAt(0);
         for (int i = 1; i < key.length(); i++) {
-            result = (key.charAt(i) + 256 * result) % p;
+            result = (key.charAt(i) + result * 256) % p;
         }
         return (int) result;
     }

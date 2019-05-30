@@ -1,11 +1,8 @@
-import java.io.IOException;
-import java.nio.file.*;
-
 public class BloomFilter {
     // ---------------------- fields ----------------------
     private int p = 15486907;
     private int m1;
-    public int[] table; // the table of the bloom filter
+    protected int[] table; // the table of the bloom filter
     private String[] functions; // array of the hash functions alpha and beta parameters
 
     // ---------------------- constructor ----------------------
@@ -21,7 +18,7 @@ public class BloomFilter {
 
     // ---------------------- Methods ----------------------
     public void updateTable(String path) {
-        int[] encodedKeys = HelperFunctions.keyPharser(path);
+        int[] encodedKeys = HelperFunctions.keyParser(path);
         // adding all the keys to the bloom filter table
         for (int encodedKey : encodedKeys) add(encodedKey);
     }
@@ -56,24 +53,32 @@ public class BloomFilter {
     }
 
     /**
-     * @param function String that contains the alpha & beta parameters
+     * @param function String that contains the alpha & beta parameters separated by underscore
      * @param key      the key to insert
-     * @return h the hashing result
+     * @return int of the hashing result
      */
     private int hashing(String function, int key) {
+        int underscoreIndex = function.indexOf("_");
+        String alphaStr = function.substring(0, underscoreIndex);
+        String betaStr = function.substring(underscoreIndex + 1);
+        // check if alpha & beta are legal parameters
+        if (!alphaStr.matches("[0-9]+") || !betaStr.matches("[0-9]+")) {
+            throw new IllegalArgumentException("alpha & beta  must be a positive numbers");
+        }
+        int alpha = Integer.parseInt(alphaStr);
+        int beta = Integer.parseInt(betaStr);
         // calculating the current hash function
-        int alpha = function.charAt(0) - '0';
-        int beta = function.charAt(2) - '0';
         return ((alpha * key + beta) % p) % m1;
     }
 
     public String getFalsePositivePercentage(HashTable hashTable, String path) {
-        int[] encodedKeys = HelperFunctions.keyPharser(path);
+        int[] encodedKeys = HelperFunctions.keyParser(path);
         double falseRejection = 0;
         double trueRejection = 0;
         for (int encodedKey : encodedKeys) {
             if (contains(encodedKey) & !hashTable.contains(encodedKey))
                 falseRejection++;
+
             if (hashTable.contains(encodedKey))
                 trueRejection++;
         }
@@ -83,12 +88,11 @@ public class BloomFilter {
     }
 
     public String getRejectedPasswordsAmount(String path) {
-        int[] encodedKeys = HelperFunctions.keyPharser(path);
+        int[] encodedKeys = HelperFunctions.keyParser(path);
         int rejectedPasswordsAmount = 0;
         for (int encodedKey : encodedKeys) {
             if (contains(encodedKey))
                 rejectedPasswordsAmount++;
-
         }
         return Integer.toString(rejectedPasswordsAmount);
     }

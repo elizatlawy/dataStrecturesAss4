@@ -21,7 +21,7 @@ public class Tests {
 //        System.out.println(estimatedRunTime(str3));
 //        System.out.println(estimatedRunTime(str4));
 
-        BTreeTests();
+        //BTreeTests();
         BloomFilterTests();
 
 //        // ++++++++++++++++++ writing function +++++++++++++++
@@ -77,20 +77,22 @@ public class Tests {
         //Create the Bloom Filter.
         for (int i = 1; i <= 1; i++) {
             String s = "" + i;
-            BloomFilter bloomFilter = contructBloomFilter("1000000");
+            BloomFilter bloomFilter = contructBloomFilter("32");
             //Create the Hash Table.
-            HashTable hashTable = contructHashTable("1000000");
+            HashTable hashTable = contructHashTable("32");
             //Find the percentage of false-positives
-//            String falsePositivesPercent = bloomFilter.getFalsePositivePercentage(hashTable, System.getProperty("user.dir")+"/requested_passwords.txt");
-//            System.out.println(falsePositivesPercent);
-//
-//            //Find the number of rejected passwords
-//            String rejectedPasswordsAmount = bloomFilter.getRejectedPasswordsAmount(System.getProperty("user.dir")+"/requested_passwords.txt");
-//            System.out.println("rejected by BF: " + rejectedPasswordsAmount);
-//            System.out.println("table size: " + i);
+            String falsePositivesPercent = bloomFilter.getFalsePositivePercentage(hashTable, System.getProperty("user.dir")+"/requested_passwords.txt");
+            System.out.println(falsePositivesPercent);
 
-            String hashTableSearchTime = hashTable.getSearchTime(System.getProperty("user.dir") + "/10k-most-common.txt");
+            //Find the number of rejected passwords
+            String rejectedPasswordsAmount = bloomFilter.getRejectedPasswordsAmount(System.getProperty("user.dir")+"/requested_passwords.txt");
+            System.out.println("rejected by BF: " + rejectedPasswordsAmount);
+            System.out.println("table size: " + i);
+
+            String hashTableSearchTime = hashTable.getSearchTime(System.getProperty("user.dir") + "//bad_passwords.txt");
             System.out.println(hashTableSearchTime);
+            System.out.println("+++ the bloom filter +++");
+            System.out.println(Arrays.toString(bloomFilter.table));
         }
     }
 
@@ -101,7 +103,7 @@ public class Tests {
         //Get the DFS representation of the btree
         //String treeLayout = btree.toString();
         //System.out.println(treeLayout);
-        String btreeSearchTime = btree.getSearchTime(System.getProperty("user.dir") + "/10k-most-common.txt");
+        String btreeSearchTime = btree.getSearchTime(System.getProperty("user.dir") + "/bad_passwords.txt");
         System.out.println(btreeSearchTime);
 
         //Get the DFS representation of the btree, after performing deletions
@@ -119,21 +121,21 @@ public class Tests {
     // Insert the bad passwords into the tree.
     private static BTree createTree(String tVal) {
         BTree btree = new BTree(tVal);
-        btree.createFullTree(System.getProperty("user.dir") + "/password-list-top-100000.txt");
+        btree.createFullTree(System.getProperty("user.dir") + "/bad_passwords.txt");
         return btree;
     }
 
     private static BloomFilter contructBloomFilter(String m1) {
         BloomFilter bloomFilter = new BloomFilter(m1, System.getProperty("user.dir") + "/hash_functions.txt");
         //update the Bloom Filter's table with the bad passwords
-        bloomFilter.updateTable(System.getProperty("user.dir") + "/password-list-top-100000.txt");
+        bloomFilter.updateTable(System.getProperty("user.dir") + "/bad_passwords.txt");
         return bloomFilter;
     }
 
     private static HashTable contructHashTable(String m2) {
         HashTable hashTable = new HashTable(m2);
         //update the Hash Table with the bad passwords
-        hashTable.updateTable(System.getProperty("user.dir") + "/password-list-top-100000.txt");
+        hashTable.updateTable(System.getProperty("user.dir") + "/bad_passwords.txt");
         return hashTable;
     }
 

@@ -1,6 +1,4 @@
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class HashTable {
     // ---------------------- fields ----------------------
@@ -18,7 +16,7 @@ public class HashTable {
 
     // ---------------------- Methods ----------------------
     public void updateTable(String path) {
-        int[] encodedKeys = HelperFunctions.keyPharser(path);
+        int[] encodedKeys = HelperFunctions.keyParser(path);
         // adding all the keys to the bloom filter table
         for (int encodedKey : encodedKeys) {
             int index = hashFunction(encodedKey);

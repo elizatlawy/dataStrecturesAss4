@@ -1,10 +1,2 @@
-123456
-Donald
-google
 hellow
-login
-password
 querty
-starwars
-welcome
-zxcvbnm
